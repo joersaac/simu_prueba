@@ -42,7 +42,8 @@ int main (int argc, char** argv) {
     cout << "Applying Dirichlet Boundary Conditions...\n\n";
     apply_dirichlet_boundary_conditions(&K, &b, &M);
 
-    //K.show(); b.show();
+    K.show();
+    // b.show();
 
     cout << "Solving global system...\n\n";
     Vector T(b.get_size()), T_full(num_nodes);

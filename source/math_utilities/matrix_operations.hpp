@@ -79,8 +79,11 @@ void calculate_L_matrix(Matrix* A, int n, Matrix* L){
                     //cout << L->get(j,k) << " ";
                     acum += pow(L->get(k,j),2);
                 }
-                //cout << A->get(j,j) << " " << acum << "\n";
-                L->set(sqrt(A->get(j,j) - acum),j,j);
+                cout << A->get(j,j) << " " << acum << "\n";
+                if(A->get(j,j) - acum >= 0)
+                    L->set(sqrt(A->get(j,j) - acum),j,j);
+                else
+                    L->set(0.000001,j,j);
             }
             else{
                 if(i > j){
@@ -89,7 +92,7 @@ void calculate_L_matrix(Matrix* A, int n, Matrix* L){
                         for(int k = 0; k < j; k++){
                             acum += L->get(i,k)*L->get(j,k);
                         }
-                        cout << L->get(j,j) << "\n";
+                        // cout << L->get(j,j) << "\n";
                         L->set((1/L->get(j,j))*(A->get(i,j) - acum),i,j);
                     }
                     else{
