@@ -83,13 +83,18 @@ void calculate_L_matrix(Matrix* A, int n, Matrix* L){
                 L->set(sqrt(A->get(j,j) - acum),j,j);
             }
             else{
-                if(i > j && L->get(j,j) != 0){
-                    acum = 0;
-                    for(int k = 0; k < j; k++){
-                        acum += L->get(i,k)*L->get(j,k);
+                if(i > j){
+                    if(L->get(j,j) != 0){
+                        acum = 0;
+                        for(int k = 0; k < j; k++){
+                            acum += L->get(i,k)*L->get(j,k);
+                        }
+                        cout << L->get(j,j) << "\n";
+                        L->set((1/L->get(j,j))*(A->get(i,j) - acum),i,j);
                     }
-                    cout << L->get(j,j) << "\n";
-                    L->set((1/L->get(j,j))*(A->get(i,j) - acum),i,j);
+                    else{
+                        L->set(0.000001,i,j);
+                    }
                 } 
                 else{
                     L->set(0,i,j);
@@ -104,16 +109,23 @@ void calculate_Y_matrix(Matrix* L, int n, Matrix* Y){
 
     for(int i= 0; i < n; i++){
         for(int j= 0; j < n; j++){
-            if(i == j && L->get(j,j) != 0){
-                Y->set(1/L->get(i,i),i,i);
+            if(i == j){
+                if(L->get(j,j) != 0)
+                    Y->set(1/L->get(i,i),i,i);
+                else
+                    L->set(0.000001,i,j);
             }
             else{
-                if(i > j && L->get(i,i) != 0){
-                    acum = 0;
-                    for(int k = j; k < i; k++){
-                        acum += L->get(i,k)*Y->get(k,j);
+                if(i > j){
+                    if(L->get(i,i) != 0){
+                        acum = 0;
+                        for(int k = j; k < i; k++){
+                            acum += L->get(i,k)*Y->get(k,j);
+                        }
+                        Y->set(-(1/L->get(i,i))*acum,i,j);
                     }
-                    Y->set(-(1/L->get(i,i))*acum,i,j);
+                    else
+                        L->set(0.000001,i,j);
                 }
                 else{
                     Y->set(0,i,j);
@@ -135,6 +147,8 @@ void calculate_X_matrix(Matrix* Y,Matrix* L, int n, Matrix* X){
                 }
                 X->set((1/L->get(i,i))*( Y->get(i,j) - acum ),i,j);
             }
+            else
+                L->set(0.000001,i,j);
         }
     }
 }
@@ -147,10 +161,7 @@ void calculate_inverse(Matrix* A, int n, Matrix* X){
     
     calculate_L_matrix(A,n,&L);
 
-
     calculate_Y_matrix(&L,n,&Y);
-    
-    Y.show();
 
     calculate_X_matrix(&Y,&L,n,X);
 
