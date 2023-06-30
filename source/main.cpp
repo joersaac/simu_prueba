@@ -35,31 +35,31 @@ int main(int argc, char** argv) {
     std::cout << "Performing Assembly...\n\n";
     assembly(&K, &b, local_Ks, local_bs, num_elements, &M);
 
-    // K.showMatrix();
-    // b.show();
+    // K.show_matrix();
+    // b.show_vector();
 
     std::cout << "Applying Neumann Boundary Conditions...\n\n";
     apply_neumann_boundary_conditions(&b, &M);
 
-    // b.show();
+    // b.show_vector();
 
     std::cout << "Applying Dirichlet Boundary Conditions...\n\n";
     apply_dirichlet_boundary_conditions(&K, &b, &M);
 
-    // K.showMatrix();
-    // b.show();
+    // K.show_matrix();
+    // b.show_vector();
 
     std::cout << "Solving global system...\n\n";
 
-    Vector T(b.get_size()), T_full(num_nodes);
+    Vector T(b.get_vector_size()), T_full(num_nodes);
     solve_system(&K, &b, &T);
 
-    // T.show();
+    // T.show_vector();
 
     std::cout << "Preparing results...\n\n";
     merge_results_with_dirichlet(&T, &T_full, num_nodes, &M);
 
-    // T_full.show();
+    // T_full.show_vector();
 
     std::cout << "Writing output file...\n\n";
     write_output(filename, &T_full);

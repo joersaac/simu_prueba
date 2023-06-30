@@ -131,21 +131,21 @@ class Mesh {
         }
 
         void report() {
-            std::cout << "\n\n\t ***** PROBLEM DATA *****\t\n**********************\n";
+            std::cout << "\n\t ***** PROBLEM DATA *****\t\n\n";
             std::cout << "Thermal Conductivity: " << problem_data[THERMAL_CONDUCTIVITY] << "\n";
             std::cout << "Heat Source: " << problem_data[HEAT_SOURCE] << "\n\n";
-            std::cout << "\t ***** QUANTITIES *****\t\n***********************\n";
+            std::cout << "\n\t ***** QUANTITIES *****\t\n\n";
             std::cout << "Number of nodes: " << quantities[NUM_NODES] << "\n";
             std::cout << "Number of elements: " << quantities[NUM_ELEMENTS] << "\n";
             std::cout << "Number of dirichlet boundary conditions: " << quantities[NUM_DIRICHLET] << "\n";
             std::cout << "Number of neumann boundary conditions: " << quantities[NUM_NEUMANN] << "\n\n";
-            std::cout << "\t ***** LIST OF NODES *****\t\n**********************\n";
+            std::cout << "\n\t ***** LIST OF NODES *****\t\n\n";
             print_nodes_list();
-            std::cout << "\t ***** LIST OF ELEMENTS *****\t\n**********************\n";
+            std::cout << "\n\t ***** LIST OF ELEMENTS *****\t\n\n";
             print_elements_list();
-            std::cout << "\t***** LIST OF DIRICHLET BOUNDARY CONDITIONS *****\t\n**********************\n";
+            std::cout << "\n\t***** LIST OF DIRICHLET BOUNDARY CONDITIONS *****\t\n\n";
             print_dirichlet_conditions();
-            std::cout << "\t***** LIST OF NEUMANN BOUNDARY CONDITIONS *****\t\n**********************\n";
+            std::cout << "\n\t***** LIST OF NEUMANN BOUNDARY CONDITIONS *****\t\n\n";
             print_neumann_conditions();
             std::cout << "\n\n";
         }

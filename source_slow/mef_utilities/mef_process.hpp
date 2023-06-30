@@ -15,9 +15,9 @@ float calculate_local_jacobian(float x1, float y1, float z1,
 }
 
 void calculate_B(Matrix* B){
-    B->set(-1,0,0);  B->set(1,0,1);  B->set(0,0,2); B->set(0,0,3);
-    B->set(-1,1,0);  B->set(0,1,1);  B->set(1,1,2); B->set(0,1,3);
-    B->set(-1,2,0);  B->set(0,2,1);  B->set(0,2,2); B->set(1,2,3);
+    B->set_value_on_matrix(-1,0,0);  B->set_value_on_matrix(1,0,1);  B->set_value_on_matrix(0,0,2); B->set_value_on_matrix(0,0,3);
+    B->set_value_on_matrix(-1,1,0);  B->set_value_on_matrix(0,1,1);  B->set_value_on_matrix(1,1,2); B->set_value_on_matrix(0,1,3);
+    B->set_value_on_matrix(-1,2,0);  B->set_value_on_matrix(0,2,1);  B->set_value_on_matrix(0,2,2); B->set_value_on_matrix(1,2,3);
 }
 
 void calculate_local_A(Matrix* A, 
@@ -25,13 +25,13 @@ void calculate_local_A(Matrix* A,
                         float x2, float y2, float z2, 
                         float x3, float y3, float z3,
                         float x4, float y4, float z4){
-    A->set( (y3 - y1)*(z4 - z1) - (y4 - y1)*(z3 - z1), 0, 0);  A->set(-(x3 - x1)*(z4 - z1) + (x4 - x1)*(z3 - z1), 0, 1);  A->set( (x3 - x1)*(y4 - y1) - (x4 - x1)*(y3 - y1), 0, 2);
-    A->set(-(y2 - y1)*(z4 - z1) + (y4 - y1)*(z2 - z1), 1, 0);  A->set( (x2 - x1)*(z4 - z1) - (x4 - x1)*(z2 - z1), 1, 1);  A->set(-(x2 - x1)*(y4 - y1) + (x4 - x1)*(y2 - y1), 1, 2);
-    A->set( (y2 - y1)*(z3 - z1) - (y3 - y1)*(z2 - z1), 2, 0);  A->set(-(x2 - x1)*(z3 - z1) + (x3 - x1)*(z2 - z1), 2, 1);  A->set( (x2 - x1)*(y3 - y1) - (x3 - x1)*(y2 - y1), 2, 2);
+    A->set_value_on_matrix( (y3 - y1)*(z4 - z1) - (y4 - y1)*(z3 - z1), 0, 0);  A->set_value_on_matrix(-(x3 - x1)*(z4 - z1) + (x4 - x1)*(z3 - z1), 0, 1);  A->set_value_on_matrix( (x3 - x1)*(y4 - y1) - (x4 - x1)*(y3 - y1), 0, 2);
+    A->set_value_on_matrix(-(y2 - y1)*(z4 - z1) + (y4 - y1)*(z2 - z1), 1, 0);  A->set_value_on_matrix( (x2 - x1)*(z4 - z1) - (x4 - x1)*(z2 - z1), 1, 1);  A->set_value_on_matrix(-(x2 - x1)*(y4 - y1) + (x4 - x1)*(y2 - y1), 1, 2);
+    A->set_value_on_matrix( (y2 - y1)*(z3 - z1) - (y3 - y1)*(z2 - z1), 2, 0);  A->set_value_on_matrix(-(x2 - x1)*(z3 - z1) + (x3 - x1)*(z2 - z1), 2, 1);  A->set_value_on_matrix( (x2 - x1)*(y3 - y1) - (x3 - x1)*(y2 - y1), 2, 2);
 }
 
 void create_local_K(Matrix* K, short element_id, Mesh* M){
-    K->set_size(4,4);
+    K->set_matrix_size(4,4);
     float k = M->get_problem_data(THERMAL_CONDUCTIVITY);
     float x1 = M->get_element(element_id)->get_node1()->get_x_coordinate(), y1 = M->get_element(element_id)->get_node1()->get_y_coordinate(), z1 = M->get_element(element_id)->get_node1()->get_z_coordinate(),
         x2 = M->get_element(element_id)->get_node2()->get_x_coordinate(), y2 = M->get_element(element_id)->get_node2()->get_y_coordinate(), z2 = M->get_element(element_id)->get_node2()->get_z_coordinate(),
@@ -60,7 +60,7 @@ void create_local_K(Matrix* K, short element_id, Mesh* M){
 }
 
 void create_local_b(Vector* b, short element_id, Mesh* M){
-    b->set_size(4);
+    b->set_vector_size(4);
 
     float Q = M->get_problem_data(HEAT_SOURCE);
     float x1 = M->get_element(element_id)->get_node1()->get_x_coordinate(), y1 = M->get_element(element_id)->get_node1()->get_y_coordinate(), z1 = M->get_element(element_id)->get_node1()->get_z_coordinate(),
@@ -69,10 +69,10 @@ void create_local_b(Vector* b, short element_id, Mesh* M){
         x4 = M->get_element(element_id)->get_node4()->get_x_coordinate(), y4 = M->get_element(element_id)->get_node4()->get_y_coordinate(), z4 = M->get_element(element_id)->get_node4()->get_z_coordinate();
     float J = calculate_local_jacobian(x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4);
 
-    b->set(Q*J/24,0);
-    b->set(Q*J/24,1);
-    b->set(Q*J/24,2);
-    b->set(Q*J/24,3);
+    b->set_value_on_pos(Q*J/24,0);
+    b->set_value_on_pos(Q*J/24,1);
+    b->set_value_on_pos(Q*J/24,2);
+    b->set_value_on_pos(Q*J/24,3);
 
     //cout << "\t\tLocal vector created for Element " << element_id+1 << ": "; b->show(); cout << "\n";
 }
@@ -86,22 +86,22 @@ void create_local_systems(Matrix* Ks, Vector* bs, short num_elements, Mesh* M){
 }
 
 void assembly_K(Matrix* K, Matrix* local_K, short index1, short index2, int index3, int index4){
-    K->add(local_K->get(0,0),index1,index1);  K->add(local_K->get(0,1),index1,index2);  K->add(local_K->get(0,2),index1,index3);  K->add(local_K->get(0,3),index1,index4); 
-    K->add(local_K->get(1,0),index2,index1);  K->add(local_K->get(1,1),index2,index2);  K->add(local_K->get(1,2),index2,index3);  K->add(local_K->get(1,3),index2,index4);
-    K->add(local_K->get(2,0),index3,index1);  K->add(local_K->get(2,1),index3,index2);  K->add(local_K->get(2,2),index3,index3);  K->add(local_K->get(2,3),index3,index4);
-    K->add(local_K->get(3,0),index4,index1);  K->add(local_K->get(3,1),index4,index2);  K->add(local_K->get(3,2),index4,index3);  K->add(local_K->get(3,3),index4,index4);
+    K->add_value_on_pos(local_K->get_pos_value(0,0),index1,index1);  K->add_value_on_pos(local_K->get_pos_value(0,1),index1,index2);  K->add_value_on_pos(local_K->get_pos_value(0,2),index1,index3);  K->add_value_on_pos(local_K->get_pos_value(0,3),index1,index4); 
+    K->add_value_on_pos(local_K->get_pos_value(1,0),index2,index1);  K->add_value_on_pos(local_K->get_pos_value(1,1),index2,index2);  K->add_value_on_pos(local_K->get_pos_value(1,2),index2,index3);  K->add_value_on_pos(local_K->get_pos_value(1,3),index2,index4);
+    K->add_value_on_pos(local_K->get_pos_value(2,0),index3,index1);  K->add_value_on_pos(local_K->get_pos_value(2,1),index3,index2);  K->add_value_on_pos(local_K->get_pos_value(2,2),index3,index3);  K->add_value_on_pos(local_K->get_pos_value(2,3),index3,index4);
+    K->add_value_on_pos(local_K->get_pos_value(3,0),index4,index1);  K->add_value_on_pos(local_K->get_pos_value(3,1),index4,index2);  K->add_value_on_pos(local_K->get_pos_value(3,2),index4,index3);  K->add_value_on_pos(local_K->get_pos_value(3,3),index4,index4);
 }
 
 void assembly_b(Vector* b, Vector* local_b, short index1, short index2, int index3, int index4){
-    b->add(local_b->get(0),index1);
-    b->add(local_b->get(1),index2);
-    b->add(local_b->get(2),index3);
-    b->add(local_b->get(3),index4);
+    b->sum_value_on_pos(local_b->get_value_on_pos(0),index1);
+    b->sum_value_on_pos(local_b->get_value_on_pos(1),index2);
+    b->sum_value_on_pos(local_b->get_value_on_pos(2),index3);
+    b->sum_value_on_pos(local_b->get_value_on_pos(3),index4);
 }
 
 void assembly(Matrix* K, Vector* b, Matrix* Ks, Vector* bs, short num_elements, Mesh* M){
-    K->init();
-    b->init();
+    K->init_matrix();
+    b->init_vector();
     //K->show(); b->show();
 
     for(int e = 0; e < num_elements; e++){
@@ -124,14 +124,14 @@ void apply_neumann_boundary_conditions(Vector* b, Mesh* M){
         Condition* cond = M->get_neumann_condition(c);
         
         short index = cond->get_node()->get_ID() - 1;
-        b->add(cond->get_value(), index);
+        b->sum_value_on_pos(cond->get_value(), index);
     }
     //cout << "\t\t"; b->show(); cout << "\n";
 }
 
 void add_column_to_RHS(Matrix* K, Vector* b, int col, float T_bar){
     for(int r = 0; r < K->get_nrows(); r++)
-        b->add(-T_bar*K->get(r,col),r);
+        b->sum_value_on_pos(-T_bar*K->get_pos_value(r,col),r);
 }
 
 void apply_dirichlet_boundary_conditions(Matrix* K, Vector* b, Mesh* M){
@@ -185,9 +185,9 @@ void merge_results_with_dirichlet(Vector* T, Vector* Tf, int n, Mesh* M){
         
             float cond_value = cond->get_value();
 
-            Tf->set(cond_value,i);
+            Tf->set_value_on_pos(cond_value,i);
         }else{
-            Tf->set(T->get(cont_T),i);
+            Tf->set_value_on_pos(T->get_value_on_pos(cont_T),i);
             cont_T++;
         }
     }

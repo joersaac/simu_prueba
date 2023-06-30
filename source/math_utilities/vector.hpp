@@ -1,62 +1,77 @@
 class Vector {
     private:
-        int size;
-        float* data;
+        int size;     // Tamaño del vector
+        float* data;  // Puntero al arreglo de datos
 
-        void create(){
+        // Crea el arreglo de datos
+        void create() {
             data = (float*) malloc(sizeof(float) * size);
         }
 
     public:
-        Vector(){}
-        Vector(int data_qty){
+        // Constructores
+        Vector() {}
+        Vector(int data_qty) {
             size = data_qty;
             create();
         }
-        ~Vector(){
+
+        // Destructor
+        ~Vector() {
             free(data);
         }
 
-        void init(){
-            for(int i = 0; i < size; i++)
+        // Inicializa todos los elementos del vector con cero
+        void init_vector() {
+            for (int i = 0; i < size; i++)
                 data[i] = 0;
         }
 
-        void set_size(int num_values){
+        // Establece el tamaño del vector y crea el arreglo de datos correspondiente
+        void set_vector_size(int num_values) {
             size = num_values;
             create();
         }
-        int get_size(){
+
+        // Obtiene el tamaño del vector
+        int get_vector_size() {
             return size;
         }
 
-        void set(float value, int position){
+        // Establece el valor de un elemento en una posición dada
+        void set_value_on_pos(float value, int position) {
             data[position] = value;
         }
-        void add(float value, int position){
+
+        // Suma un valor al elemento en una posición dada
+        void sum_value_on_pos(float value, int position) {
             data[position] += value;
         }
-        float get(int position){
+
+        // Obtiene el valor del elemento en una posición dada
+        float get_value_on_pos(int position) {
             return data[position];
         }
 
-        void remove_row(int row){
-            int neo_index = 0;
-            float* neo_data = (float*) malloc(sizeof(float) * (size-1));
-            for(int i = 0; i < size; i++)
-                if(i != row){
-                    neo_data[neo_index] = data[i];
-                    neo_index++;
+        // Elimina una fila del vector
+        void remove_row(int row) {
+            int temp_index = 0;
+            float* temp_data = (float*) malloc(sizeof(float) * (size-1));
+            for (int i = 0; i < size; i++)
+                if (i != row) {
+                    temp_data[temp_index] = data[i];
+                    temp_index++;
                 }
             free(data);
-            data = neo_data;
+            data = temp_data;
             size--;
         }
 
-        void show(){
-            cout << "[ " << data[0];
-            for(int i = 1; i < size; i++)
-                cout << "; " << data[i];
-            cout << " ]\n\n";
+        // Muestra los elementos del vector
+        void show_vector() {
+            std::cout << "[ " << data[0];
+            for (int i = 1; i < size; i++)
+                std::cout << "; " << data[i];
+            std::cout << " ]\n\n";
         }
 };

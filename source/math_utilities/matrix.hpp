@@ -1,109 +1,145 @@
 #include <stdio.h>
 
 class Matrix {
-    private:
-        int nrows, ncols;
-        float** data;
+private:
+    int num_rows, num_cols;
+    float** data;
 
-        void create(){
-            data = (float**) malloc(sizeof(float*) * nrows);
-            for(int r = 0; r < nrows; r++)
-                data[r] = (float*) malloc(sizeof(float) * ncols);
+    // Función auxiliar para crear la matriz en memoria dinámica
+    void create() {
+        data = (float**)malloc(sizeof(float*) * num_rows);
+        for (int row = 0; row < num_rows; row++) {
+            data[row] = (float*)malloc(sizeof(float) * num_cols);
         }
+    }
 
-    public:
-        Matrix(){}
-        Matrix(int rows, int cols){
-            nrows = rows;
-            ncols = cols;
-            create();
-        }
-        ~Matrix(){
-            for(int r = 0; r < nrows; r++)
-                free(data[r]);
-            free(data);
-        }
+public:
+    // Constructor por defecto
+    Matrix() {}
 
-        void init(){
-            for(int r = 0; r < nrows; r++)
-                for(int c = 0; c < ncols; c++)
-                    data[r][c] = 0;
-        }
+    // Constructor que acepta el número de filas y columnas
+    Matrix(int rows, int cols) {
+        num_rows = rows;
+        num_cols = cols;
+        create();
+    }
 
-        void set_size(int rows, int cols){
-            nrows = rows;
-            ncols = cols;
-            create();
-        }
-        int get_nrows(){
-            return nrows;
-        }
-        int get_ncols(){
-            return ncols;
+    // Destructor de la clase
+    ~Matrix() {
+        for (int rows = 0; rows < num_rows; rows++) {
+            free(data[rows]);
         }
 
-        void set(float value, int row, int col){
-            data[row][col] = value;
-        }
-        void add(float value, int row, int col){
-            data[row][col] += value;
-        }
-        float get(int row, int col){
-            return data[row][col];
-        }
+        free(data);
+    }
 
-        void remove_row(int row){
-            int neo_index = 0;
-            float** neo_data = (float**) malloc(sizeof(float*) * (nrows-1));
-            for(int i = 0; i < nrows; i++)
-                if(i != row){
-                    neo_data[neo_index] = data[i];
-                    neo_index++;
-                }
-            //printf("remove_row: %p - %p\n",data[row],data);
-            free(data[row]);
-            free(data);
-            data = neo_data;
-            nrows--;
-        }
-
-        void remove_column(int col){
-            int neo_index = 0;
-            float** neo_data = (float**) malloc(sizeof(float*) * nrows);
-            for(int r = 0; r < nrows; r++)
-                neo_data[r] = (float*) malloc(sizeof(float) * (ncols-1));
-
-            for(int r = 0; r < nrows; r++){
-                for(int c = 0; c < ncols; c++)
-                    if(c != col){
-                        neo_data[r][neo_index] = data[r][c];
-                        neo_index++;
-                    }
-                neo_index = 0;
+    // Inicializa todos los elementos de la matriz a cero
+    void init_matrix() {
+        for (int rows = 0; rows < num_rows; rows++) {
+            for (int cols = 0; cols < num_cols; cols++) {
+                data[rows][cols] = 0;
             }
-            //printf("remove_column: %p - %p\n",data[0],data);
-            for(int r = 0; r < nrows; r++)
-                free(data[r]);
-            free(data);
-            data = neo_data;
-            ncols--;
         }
+    }
 
-        void clone(Matrix* other){
-            for(int r = 0; r < nrows; r++)
-                for(int c = 0; c < ncols; c++)
-                    other->set(data[r][c],r,c);
-        }
+    // Establece el tamaño de la matriz
+    void set_matrix_size(int rows, int cols) {
+        num_rows = rows;
+        num_cols = cols;
+        create();
+    }
 
-        void show(){
-            cout << "[ ";
-            for(int r = 0; r < nrows; r++){
-                cout << "[ " << data[r][0];
-                for(int c = 1; c < ncols; c++){
-                    cout << ", " << data[r][c];
-                }
-                cout << " ] ";
+    // Devuelve el número de filas de la matriz
+    int get_num_rows() {
+        return num_rows;
+    }
+
+    // Devuelve el número de columnas de la matriz
+    int get_num_cols() {
+        return num_cols;
+    }
+
+    // Establece el valor en la posición (row, col) de la matriz
+    void set_value_on_matrix(float value, int row, int col) {
+        data[row][col] = value;
+    }
+
+    // Añade el valor a la posición (row, col) de la matriz
+    void add_value_on_pos(float value, int row, int col) {
+        data[row][col] += value;
+    }
+
+    // Devuelve el valor en la posición (row, col) de la matriz
+    float get_pos_value(int row, int col) {
+        return data[row][col];
+    }
+
+    // Elimina una fila de la matriz
+    void remove_row(int row) {
+        int temp_index = 0;
+        float** temp_data = (float**)malloc(sizeof(float*) * (num_rows - 1));
+
+        for (int i = 0; i < num_rows; i++) {
+            if (i != row) {
+                temp_data[temp_index] = data[i];
+                temp_index++;
             }
-            cout << " ]\n\n";
         }
+
+        free(data[row]);
+        free(data);
+
+        data = temp_data;
+        num_rows--;
+    }
+
+    // Elimina una columna de la matriz
+    void remove_column(int col) {
+        int temp_index = 0;
+        float** temp_data = (float**)malloc(sizeof(float*) * num_rows);
+
+        for (int rows = 0; rows < num_rows; rows++) {
+            temp_data[rows] = (float*)malloc(sizeof(float) * (num_cols - 1));
+        }
+
+        for (int rows = 0; rows < num_rows; rows++) {
+            for (int cols = 0; cols < num_cols; cols++) {
+                if (cols != col) {
+                    temp_data[rows][temp_index] = data[rows][cols];
+                    temp_index++;
+                }
+            }
+            temp_index = 0;
+        }
+
+        for (int rows = 0; rows < num_rows; rows++) {
+            free(data[rows]);
+        }
+
+        free(data);
+        data = temp_data;
+        num_cols--;
+    }
+
+    // Clona los valores de la matriz a otra matriz proporcionada
+    void clone_matrix(Matrix* other) {
+        for (int rows = 0; rows < num_rows; rows++) {
+            for (int cols = 0; cols < num_cols; cols++) {
+                other->set_value_on_matrix(data[rows][cols], rows, cols);
+            }
+        }
+    }
+
+    // Muestra los elementos de la matriz en la consola
+    void show_matrix() {
+        std::cout << "[ ";
+            for (int rows = 0; rows < num_rows; rows++) {
+                std::cout << "[ " << data[rows][0];
+                for (int cols = 1; cols < num_cols; cols++) {
+                    std::cout << ", " << data[rows][cols];
+                }
+                std::cout << " ] ";
+            }
+        std::cout << " ]\n\n";
+    }
 };

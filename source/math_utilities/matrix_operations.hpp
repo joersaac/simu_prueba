@@ -6,30 +6,30 @@
 void product_scalar_by_matrix(float scalar, Matrix* M, int n, int m, Matrix* R){
     for(int r = 0; r < n; r++)
         for(int c = 0; c < m; c++)
-            R->set(scalar*M->get(r,c),r,c);
+            R->set_value_on_matrix(scalar*M->get_pos_value(r,c),r,c);
 }
 
 void product_matrix_by_vector(Matrix* M, Vector* V, int n, int m, Vector* R){
     for(int r = 0; r < n; r++){
         float acc = 0;
         for(int c = 0; c < n; c++)
-            acc += M->get(r,c)*V->get(c);
-        R->set(acc,r);
+            acc += M->get_pos_value(r,c)*V->get_value_on_pos(c);
+        R->set_value_on_pos(acc,r);
     }
 }
 
 void product_matrix_by_matrix(Matrix* A, Matrix* B, Matrix* R){
-    int n = A->get_nrows(), m = A->get_ncols(), p = B->get_nrows(), q = B->get_ncols();
+    int n = A->get_num_rows(), m = A->get_num_cols(), p = B->get_num_rows(), q = B->get_num_cols();
     if(m == p){
-        R->set_size(n,q);
-        R->init();
+        R->set_matrix_size(n,q);
+        R->init_matrix();
         
         for(int r = 0; r < n; r++)
             for(int c = 0; c < q; c++)
                 for(int i = 0; i < m; i++)
-                    R->add(A->get(r,i)*B->get(i,c),r,c);
+                    R->add_value_on_pos(A->get_pos_value(r,i)*B->get_pos_value(i,c),r,c);
     }else{
-        cout << "Incompatibilidad de dimensiones al multiplicar matrices.\n\nAbortando...\n";
+        std::cout << "Incompatibilidad de dimensiones al multiplicar matrices.\n\nAbortando...\n";
         exit(EXIT_FAILURE);
     }
 }
@@ -37,15 +37,15 @@ void product_matrix_by_matrix(Matrix* A, Matrix* B, Matrix* R){
 float determinant(Matrix* M);
 
 float determinant_auxiliar(Matrix* M){
-    int n = M->get_ncols();
+    int n = M->get_num_cols();
     float acc = 0;
 
     for(int c = 0; c < n; c++){
         Matrix clon(n,n);
-        M->clone(&clon);
+        M->clone_matrix(&clon);
         clon.remove_row(0);
         clon.remove_column(c);
-        acc += pow(-1,c)*M->get(0,c)*determinant(&clon);
+        acc += pow(-1,c)*M->get_pos_value(0,c)*determinant(&clon);
     }
 
     return acc;
@@ -53,10 +53,10 @@ float determinant_auxiliar(Matrix* M){
 
 float determinant(Matrix* M){
     float ans;
-    switch(M->get_ncols()){
-        case 1: ans = M->get(0,0); break;
-        case 2: ans = M->get(0,0)*M->get(1,1) - M->get(0,1)*M->get(1,0); break;
-        case 3: ans = M->get(0,0)*M->get(1,1)*M->get(2,2)-M->get(0,0)*M->get(1,2)*M->get(2,1)-M->get(0,1)*M->get(1,0)*M->get(2,2)+M->get(0,1)*M->get(1,2)*M->get(2,0)+M->get(0,2)*M->get(1,0)*M->get(2,1)-M->get(0,2)*M->get(1,1)*M->get(2,0); break;
+    switch(M->get_num_cols()){
+        case 1: ans = M->get_pos_value(0,0); break;
+        case 2: ans = M->get_pos_value(0,0)*M->get_pos_value(1,1) - M->get_pos_value(0,1)*M->get_pos_value(1,0); break;
+        case 3: ans = M->get_pos_value(0,0)*M->get_pos_value(1,1)*M->get_pos_value(2,2)-M->get_pos_value(0,0)*M->get_pos_value(1,2)*M->get_pos_value(2,1)-M->get_pos_value(0,1)*M->get_pos_value(1,0)*M->get_pos_value(2,2)+M->get_pos_value(0,1)*M->get_pos_value(1,2)*M->get_pos_value(2,0)+M->get_pos_value(0,2)*M->get_pos_value(1,0)*M->get_pos_value(2,1)-M->get_pos_value(0,2)*M->get_pos_value(1,1)*M->get_pos_value(2,0); break;
         default: ans = determinant_auxiliar(M);
     }
     return ans;
@@ -65,7 +65,7 @@ float determinant(Matrix* M){
 void transpose(Matrix* M, int n, int m, Matrix* T){
     for(int r = 0; r < n; r++)
         for(int c = 0; c < m; c++)
-            T->set(M->get(r,c),c,r);
+            T->set_value_on_matrix(M->get_pos_value(r,c),c,r);
 }
 
 void calculate_L_matrix(Matrix* A, int n, Matrix* L){
@@ -76,31 +76,31 @@ void calculate_L_matrix(Matrix* A, int n, Matrix* L){
             if(i == j){
                 acum = 0;
                 for(int k = 0; k < j; k++){
-                    //cout << L->get(j,k) << " ";
-                    acum += pow(L->get(k,j),2);
+                    //std::cout << L->get(j,k) << " ";
+                    acum += pow(L->get_pos_value(k,j),2);
                 }
-                // cout << A->get(j,j) << " " << acum << "\n";
-                if(A->get(j,j) - acum >= 0)
-                    L->set(sqrt(A->get(j,j) - acum),j,j);
+                // std::cout << A->get(j,j) << " " << acum << "\n";
+                if(A->get_pos_value(j,j) - acum >= 0)
+                    L->set_value_on_matrix(sqrt(A->get_pos_value(j,j) - acum),j,j);
                 else
-                    L->set(0.000001,j,j);
+                    L->set_value_on_matrix(0.000001,j,j);
             }
             else{
                 if(i > j){
-                    if(L->get(j,j) != 0){
+                    if(L->get_pos_value(j,j) != 0){
                         acum = 0;
                         for(int k = 0; k < j; k++){
-                            acum += L->get(i,k)*L->get(j,k);
+                            acum += L->get_pos_value(i,k)*L->get_pos_value(j,k);
                         }
-                        // cout << L->get(j,j) << "\n";
-                        L->set((1/L->get(j,j))*(A->get(i,j) - acum),i,j);
+                        // std::cout << L->get(j,j) << "\n";
+                        L->set_value_on_matrix((1/L->get_pos_value(j,j))*(A->get_pos_value(i,j) - acum),i,j);
                     }
                     else{
-                        L->set(0.000001,i,j);
+                        L->set_value_on_matrix(0.000001,i,j);
                     }
                 } 
                 else{
-                    L->set(0,i,j);
+                    L->set_value_on_matrix(0,i,j);
                 }
             }
         }
@@ -113,25 +113,25 @@ void calculate_Y_matrix(Matrix* L, int n, Matrix* Y){
     for(int i= 0; i < n; i++){
         for(int j= 0; j < n; j++){
             if(i == j){
-                if(L->get(j,j) != 0)
-                    Y->set(1/L->get(i,i),i,i);
+                if(L->get_pos_value(j,j) != 0)
+                    Y->set_value_on_matrix(1/L->get_pos_value(i,i),i,i);
                 else
-                    L->set(0.000001,i,j);
+                    L->set_value_on_matrix(0.000001,i,j);
             }
             else{
                 if(i > j){
-                    if(L->get(i,i) != 0){
+                    if(L->get_pos_value(i,i) != 0){
                         acum = 0;
                         for(int k = j; k < i; k++){
-                            acum += L->get(i,k)*Y->get(k,j);
+                            acum += L->get_pos_value(i,k)*Y->get_pos_value(k,j);
                         }
-                        Y->set(-(1/L->get(i,i))*acum,i,j);
+                        Y->set_value_on_matrix(-(1/L->get_pos_value(i,i))*acum,i,j);
                     }
                     else
-                        L->set(0.000001,i,j);
+                        L->set_value_on_matrix(0.000001,i,j);
                 }
                 else{
-                    Y->set(0,i,j);
+                    Y->set_value_on_matrix(0,i,j);
                 }
             }
         }
@@ -143,23 +143,23 @@ void calculate_X_matrix(Matrix* Y,Matrix* L, int n, Matrix* X){
 
     for(int i= n-1; i >= 0; i--){
         for(int j= 0; j < n; j++){
-                if( L->get(i,i) != 0){
+                if( L->get_pos_value(i,i) != 0){
                 acum = 0;
                 for(int k = i+1; k < n; k++){
-                    acum += L->get(k,i)*X->get(k,j);
+                    acum += L->get_pos_value(k,i)*X->get_pos_value(k,j);
                 }
-                X->set((1/L->get(i,i))*( Y->get(i,j) - acum ),i,j);
+                X->set_value_on_matrix((1/L->get_pos_value(i,i))*( Y->get_pos_value(i,j) - acum ),i,j);
             }
             else
-                L->set(0.000001,i,j);
+                L->set_value_on_matrix(0.000001,i,j);
         }
     }
 }
 
 void calculate_inverse(Matrix* A, int n, Matrix* X){
     Matrix L(n,n), Y(n,n);
-    L.init();
-    Y.init();
+    L.init_matrix();
+    Y.init_matrix();
 
     
     calculate_L_matrix(A,n,&L);

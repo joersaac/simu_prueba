@@ -66,7 +66,7 @@ void read_input(std::string filename, Mesh* M) {
         M->insert_neumann_condition(
             new Condition(
                 M->get_node(id - 1), T_hat
-            ), 1);
+            ), i);
     }
 
     dat_file.close();
@@ -81,7 +81,7 @@ void write_output(std::string filename, Vector* T) {
     // Escritura de la cabecera del archivo de resultados
     res_file << "GiD Post Results File 1.0\n";
 
-    int n = T->get_size();
+    int n = T->get_vector_size();
 
     // Escritura de los resultados de temperatura en el archivo de resultados
     res_file << "Result \"Temperature\" \"Load Case 1\" " << 1 << " Scalar OnNodes\n";
@@ -89,7 +89,7 @@ void write_output(std::string filename, Vector* T) {
     res_file << "Values\n";
 
     for (int i = 0; i < n; i++)
-        res_file << i + 1 << "     " << T->get(i) << "\n";
+        res_file << i + 1 << "     " << T->get_value_on_pos(i) << "\n";
 
     res_file << "End values\n";
 
