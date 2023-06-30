@@ -3,12 +3,14 @@
 #include "vector.hpp"
 #include "matrix.hpp"
 
+// Realiza el producto escalar entre un escalar y una matriz y almacena el resultado en otra matriz
 void product_scalar_by_matrix(float scalar, Matrix* M, int n, int m, Matrix* R) {
     for(int rows = 0; rows < n; rows++)
         for(int cols = 0; cols < m; cols++)
             R->set_value_on_matrix(scalar*M->get_pos_value(rows,cols), rows, cols);
 }
 
+// Realiza el producto de una matriz por un vector y almacena el resultado en otro vector
 void product_matrix_by_vector(Matrix* M, Vector* V, int n, int m, Vector* R) {
     for(int rows = 0; rows < n; rows++) {
         float acc = 0;
@@ -20,6 +22,7 @@ void product_matrix_by_vector(Matrix* M, Vector* V, int n, int m, Vector* R) {
     }
 }
 
+// Realiza el producto entre dos matrices y almacena el resultado en una tercera matriz.
 void product_matrix_by_matrix(Matrix* A, Matrix* B, Matrix* R) {
     int n = A->get_num_rows(), m = A->get_num_cols(), p = B->get_num_rows(), q = B->get_num_cols();
 
@@ -41,6 +44,7 @@ void product_matrix_by_matrix(Matrix* A, Matrix* B, Matrix* R) {
 
 float determinant(Matrix* M);
 
+// Calcula el determinante de una matriz cuadrada de tamaño 3x3 o superior
 float determinant_auxiliar(Matrix* M) {
     int n = M->get_num_cols();
     float acc = 0;
@@ -59,6 +63,8 @@ float determinant_auxiliar(Matrix* M) {
     return acc;
 }
 
+// Calcula el determinante de una matriz cuadrada.
+// Soporta matrices de tamaño 1x1, 2x2, 3x3 y matrices de mayor tamaño.
 float determinant(Matrix* M) {
     float ans;
 
@@ -102,6 +108,7 @@ void transpose(Matrix* M, int n, int m, Matrix* T) {
             T->set_value_on_matrix(M->get_pos_value(rows, cols), cols, rows);
 }
 
+// Calcula la matriz L de la descomposición de Cholesky para una matriz simétrica definida 
 void calculate_L_matrix(Matrix* A, int n, Matrix* L) {
     float acum;
 
@@ -148,6 +155,7 @@ void calculate_L_matrix(Matrix* A, int n, Matrix* L) {
     }
 }
 
+// Calcula la matriz Y en el proceso de inversión de una matriz  utilizando la descomposición de Cholesky
 void calculate_Y_matrix(Matrix* L, int n, Matrix* Y) {
     float acum;
 
@@ -181,7 +189,8 @@ void calculate_Y_matrix(Matrix* L, int n, Matrix* Y) {
     }
 }
 
-void calculate_X_matrix(Matrix* Y,Matrix* L, int n, Matrix* X) {
+// Calcula la matriz X utilizando la descomposición de Cholesky
+void calculate_X_matrix(Matrix* Y, Matrix* L, int n, Matrix* X) {
     float acum;
 
     for(int i= n-1; i >= 0; i--) {
@@ -201,6 +210,7 @@ void calculate_X_matrix(Matrix* Y,Matrix* L, int n, Matrix* X) {
     }
 }
 
+// Calcula la matriz inversa de una matriz utilizando la descomposición de Cholesky
 void calculate_inverse(Matrix* A, int n, Matrix* X) {
     Matrix L(n, n), Y(n, n);
 
