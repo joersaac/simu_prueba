@@ -45,7 +45,7 @@ int main (int argc, char** argv) {
     //K.show(); b.show();
 
     cout << "Solving global system...\n\n";
-    Vector T(b.get_size()), T_full(num_nodes);
+    Vector T(b.get_vector_size()), T_full(num_nodes);
     solve_system(&K, &b, &T);
     //T.show();
     

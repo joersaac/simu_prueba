@@ -24,13 +24,13 @@ class Matrix {
             free(data);
         }
 
-        void init(){
+        void init_matrix(){
             for(int r = 0; r < nrows; r++)
                 for(int c = 0; c < ncols; c++)
                     data[r][c] = 0;
         }
 
-        void set_size(int rows, int cols){
+        void set_matrix_size(int rows, int cols){
             nrows = rows;
             ncols = cols;
             create();
@@ -42,13 +42,13 @@ class Matrix {
             return ncols;
         }
 
-        void set(float value, int row, int col){
+        void set_value_on_matrix(float value, int row, int col){
             data[row][col] = value;
         }
-        void add(float value, int row, int col){
+        void add_value_on_pos(float value, int row, int col){
             data[row][col] += value;
         }
-        float get(int row, int col){
+        float get_pos_value(int row, int col){
             return data[row][col];
         }
 
@@ -89,13 +89,13 @@ class Matrix {
             ncols--;
         }
 
-        void clone(Matrix* other){
+        void clone_matrix(Matrix* other){
             for(int r = 0; r < nrows; r++)
                 for(int c = 0; c < ncols; c++)
-                    other->set(data[r][c],r,c);
+                    other->set_value_on_matrix(data[r][c],r,c);
         }
 
-        void show(){
+        void show_matrix(){
             cout << "[ ";
             for(int r = 0; r < nrows; r++){
                 cout << "[ " << data[r][0];

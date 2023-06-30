@@ -56,14 +56,14 @@ void write_output(string filename, Vector* T){
     
     res_file << "GiD Post Results File 1.0\n";
 
-    int n = T->get_size();
+    int n = T->get_vector_size();
 
     res_file << "Result \"Temperature\" \"Load Case 1\" " << 1 << " Scalar OnNodes\n";
     res_file << "ComponentNames \"T\"\n";
     res_file << "Values\n";
 
     for(int i = 0; i < n; i++)
-        res_file << i+1 << "     " << T->get(i) << "\n";
+        res_file << i+1 << "     " << T->get_value_on_pos(i) << "\n";
 
     res_file << "End values\n";
 

@@ -17,26 +17,26 @@ class Vector {
             free(data);
         }
 
-        void init(){
+        void init_vector(){
             for(int i = 0; i < size; i++)
                 data[i] = 0;
         }
 
-        void set_size(int num_values){
+        void set_vector_size(int num_values){
             size = num_values;
             create();
         }
-        int get_size(){
+        int get_vector_size(){
             return size;
         }
 
-        void set(float value, int position){
+        void set_value_on_pos(float value, int position){
             data[position] = value;
         }
-        void add(float value, int position){
+        void sum_value_on_pos(float value, int position){
             data[position] += value;
         }
-        float get(int position){
+        float get_value_on_pos(int position){
             return data[position];
         }
 
@@ -53,7 +53,7 @@ class Vector {
             size--;
         }
 
-        void show(){
+        void show_vector(){
             cout << "[ " << data[0];
             for(int i = 1; i < size; i++)
                 cout << "; " << data[i];
