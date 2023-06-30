@@ -106,10 +106,10 @@ class Mesh {
             for (int i = 0; i < quantities[NUM_ELEMENTS]; i++) {
                 std::cout << 
                     "Element: " << elements[i]->get_ID() << 
-                    ", Node 1= " << elements[i]->get_node1()->get_ID() <<
-                    ", Node 2= " << elements[i]->get_node2()->get_ID() << 
-                    ", Node 3= " << elements[i]->get_node3()->get_ID() << 
-                    ", Node 4= " << elements[i]->get_node4()->get_ID() << "\n";
+                    ", Node 1= " << elements[i]->get_node_1()->get_ID() <<
+                    ", Node 2= " << elements[i]->get_node_2()->get_ID() << 
+                    ", Node 3= " << elements[i]->get_node_3()->get_ID() << 
+                    ", Node 4= " << elements[i]->get_node_4()->get_ID() << "\n";
             }
         }
 

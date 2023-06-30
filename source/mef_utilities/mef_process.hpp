@@ -63,21 +63,21 @@ void create_local_K(Matrix* K, int element_id, Mesh* M) {
     float k = M->get_problem_data(THERMAL_CONDUCTIVITY);
 
     float 
-        x1 = M->get_element(element_id)->get_node1()->get_x_coordinate(), 
-        y1 = M->get_element(element_id)->get_node1()->get_y_coordinate(), 
-        z1 = M->get_element(element_id)->get_node1()->get_z_coordinate(),
+        x1 = M->get_element(element_id)->get_node_1()->get_x_coordinate(), 
+        y1 = M->get_element(element_id)->get_node_1()->get_y_coordinate(), 
+        z1 = M->get_element(element_id)->get_node_1()->get_z_coordinate(),
         
-        x2 = M->get_element(element_id)->get_node2()->get_x_coordinate(), 
-        y2 = M->get_element(element_id)->get_node2()->get_y_coordinate(), 
-        z2 = M->get_element(element_id)->get_node2()->get_z_coordinate(),
+        x2 = M->get_element(element_id)->get_node_2()->get_x_coordinate(), 
+        y2 = M->get_element(element_id)->get_node_2()->get_y_coordinate(), 
+        z2 = M->get_element(element_id)->get_node_2()->get_z_coordinate(),
         
-        x3 = M->get_element(element_id)->get_node3()->get_x_coordinate(), 
-        y3 = M->get_element(element_id)->get_node3()->get_y_coordinate(), 
-        z3 = M->get_element(element_id)->get_node3()->get_z_coordinate(),
+        x3 = M->get_element(element_id)->get_node_3()->get_x_coordinate(), 
+        y3 = M->get_element(element_id)->get_node_3()->get_y_coordinate(), 
+        z3 = M->get_element(element_id)->get_node_3()->get_z_coordinate(),
         
-        x4 = M->get_element(element_id)->get_node4()->get_x_coordinate(), 
-        y4 = M->get_element(element_id)->get_node4()->get_y_coordinate(), 
-        z4 = M->get_element(element_id)->get_node4()->get_z_coordinate();
+        x4 = M->get_element(element_id)->get_node_4()->get_x_coordinate(), 
+        y4 = M->get_element(element_id)->get_node_4()->get_y_coordinate(), 
+        z4 = M->get_element(element_id)->get_node_4()->get_z_coordinate();
 
     float J = calculate_local_jacobian(x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4);
     float Volume = calculate_local_volume(x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4);
@@ -114,21 +114,21 @@ void create_local_b(Vector* b, int element_id, Mesh* M){
     float Q = M->get_problem_data(HEAT_SOURCE);
 
     float 
-        x1 = M->get_element(element_id)->get_node1()->get_x_coordinate(), 
-        y1 = M->get_element(element_id)->get_node1()->get_y_coordinate(),
-        z1 = M->get_element(element_id)->get_node1()->get_z_coordinate(),
+        x1 = M->get_element(element_id)->get_node_1()->get_x_coordinate(), 
+        y1 = M->get_element(element_id)->get_node_1()->get_y_coordinate(),
+        z1 = M->get_element(element_id)->get_node_1()->get_z_coordinate(),
 
-        x2 = M->get_element(element_id)->get_node2()->get_x_coordinate(), 
-        y2 = M->get_element(element_id)->get_node2()->get_y_coordinate(), 
-        z2 = M->get_element(element_id)->get_node2()->get_z_coordinate(),
+        x2 = M->get_element(element_id)->get_node_2()->get_x_coordinate(), 
+        y2 = M->get_element(element_id)->get_node_2()->get_y_coordinate(), 
+        z2 = M->get_element(element_id)->get_node_2()->get_z_coordinate(),
 
-        x3 = M->get_element(element_id)->get_node3()->get_x_coordinate(), 
-        y3 = M->get_element(element_id)->get_node3()->get_y_coordinate(), 
-        z3 = M->get_element(element_id)->get_node3()->get_z_coordinate(),
+        x3 = M->get_element(element_id)->get_node_3()->get_x_coordinate(), 
+        y3 = M->get_element(element_id)->get_node_3()->get_y_coordinate(), 
+        z3 = M->get_element(element_id)->get_node_3()->get_z_coordinate(),
 
-        x4 = M->get_element(element_id)->get_node4()->get_x_coordinate(), 
-        y4 = M->get_element(element_id)->get_node4()->get_y_coordinate(), 
-        z4 = M->get_element(element_id)->get_node4()->get_z_coordinate();
+        x4 = M->get_element(element_id)->get_node_4()->get_x_coordinate(), 
+        y4 = M->get_element(element_id)->get_node_4()->get_y_coordinate(), 
+        z4 = M->get_element(element_id)->get_node_4()->get_z_coordinate();
 
     float J = calculate_local_jacobian(x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4);
 
@@ -187,10 +187,10 @@ void assembly(Matrix* K, Vector* b, Matrix* Ks, Vector* bs, int num_elements, Me
     for(int element = 0; element < num_elements; element++){
         std::cout << "\tAssembling for Element " << element + 1 << "...\n\n";
 
-        int index1 = M->get_element(element)->get_node1()->get_ID() - 1;
-        int index2 = M->get_element(element)->get_node2()->get_ID() - 1;
-        int index3 = M->get_element(element)->get_node3()->get_ID() - 1;
-        int index4 = M->get_element(element)->get_node4()->get_ID() - 1;
+        int index1 = M->get_element(element)->get_node_1()->get_ID() - 1;
+        int index2 = M->get_element(element)->get_node_2()->get_ID() - 1;
+        int index3 = M->get_element(element)->get_node_3()->get_ID() - 1;
+        int index4 = M->get_element(element)->get_node_4()->get_ID() - 1;
 
         assembly_K(K, &Ks[element], index1, index2, index3, index4);
         assembly_b(b, &bs[element], index1, index2, index3, index4);
