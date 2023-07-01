@@ -80,7 +80,8 @@ void create_local_K(Matrix* K, int element_id, Mesh* M) {
         z4 = M->get_element(element_id)->get_node_4()->get_z_coordinate();
 
     float J = calculate_local_jacobian(x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4);
-    float Volume = calculate_local_volume(x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4);
+    //float Volume = calculate_local_volume(x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4);
+    float Volume = J/6;
 
     Matrix B(3, 4), A(3, 3);
 

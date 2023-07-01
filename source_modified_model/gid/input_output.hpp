@@ -88,8 +88,12 @@ void write_output(std::string filename, Vector* T) {
     res_file << "ComponentNames \"T\"\n";
     res_file << "Values\n";
 
-    for (int i = 0; i < n; i++)
-        res_file << i + 1 << "     " << T->get_value_on_pos(i) << "\n";
+    for (int i = 0; i < n; i++){
+        if(T->get_value_on_pos(i) >= 0)
+            res_file << i + 1 << "     " << T->get_value_on_pos(i) << "\n";
+        else
+            res_file << i + 1 << "     " << 0 << "\n";
+    }
 
     res_file << "End values\n";
 

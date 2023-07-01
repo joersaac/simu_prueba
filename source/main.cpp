@@ -46,7 +46,7 @@ int main(int argc, char** argv) {
     std::cout << "Applying Dirichlet Boundary Conditions...\n\n";
     apply_dirichlet_boundary_conditions(&K, &b, &M);
 
-    // K.show_matrix();
+    //K.show_matrix();
     // b.show_vector();
 
     std::cout << "Solving global system...\n\n";
@@ -54,12 +54,12 @@ int main(int argc, char** argv) {
     Vector T(b.get_vector_size()), T_full(num_nodes);
     solve_system(&K, &b, &T);
 
-    // T.show_vector();
+    //T.show_vector();
 
     std::cout << "Preparing results...\n\n";
     merge_results_with_dirichlet(&T, &T_full, num_nodes, &M);
 
-    // T_full.show_vector();
+    //T_full.show_vector();
 
     std::cout << "Writing output file...\n\n";
     write_output(filename, &T_full);

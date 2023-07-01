@@ -217,8 +217,9 @@ void calculate_inverse(Matrix* A, int n, Matrix* X) {
     L.init_matrix();
     Y.init_matrix();
 
-    
+    //A->show_matrix();
     calculate_L_matrix(A, n, &L);
+    //L.show_matrix();
 
     calculate_Y_matrix(&L, n, &Y);
 
